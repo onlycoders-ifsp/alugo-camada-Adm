@@ -22,10 +22,6 @@ import java.util.Date;
 @NoArgsConstructor
 public class Usuario {
 
-    /*o @ID e o @GeneratedValue dizem que a variável id é do tipo auto incremento*/
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
 
     @Column
     private String nome;
