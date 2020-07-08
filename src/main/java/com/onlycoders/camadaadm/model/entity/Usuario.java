@@ -21,7 +21,9 @@ import java.util.Date;
 @Getter@Setter
 @NoArgsConstructor
 public class Usuario {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @Column
     private String nome;
