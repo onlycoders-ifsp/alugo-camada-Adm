@@ -26,6 +26,12 @@ public class Usuario {
     private Integer id;
 
     @Column
+    private String login;
+
+    @Column
+    private String senha;
+
+    @Column
     private String nome;
 
     @Column
@@ -46,5 +52,8 @@ public class Usuario {
 
     @Column
     private Date data_nascimento;
+
+    @Column
+    private Boolean ativo;
 
 }

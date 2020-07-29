@@ -19,7 +19,6 @@ public class Produto {
     @Column
     private String nome;
     @ManyToOne()
-    @Column
     private Usuario locatario;
     @Column
     private Double valorBaseDiaria;

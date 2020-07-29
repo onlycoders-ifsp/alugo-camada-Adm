@@ -10,9 +10,11 @@ import com.onlycoders.camadaadm.model.entity.Usuario;
 import com.onlycoders.camadaadm.model.repository.UsuarioRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -61,16 +63,41 @@ public class UsuarioController {
     @ApiOperation(value = "Muda dados usuário")
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public void mudaDado(@RequestBody Usuario usuario) {
-        Optional<Usuario> usuarioBanco = repository.getByNomeAndEmail(usuario.getNome(), usuario.getEmail());
+    public void mudaDado(@RequestBody Usuario usuario){
+        repository.save(usuario);
     }
 
-    @ApiOperation(value = "Dados da api do google")
-    @PostMapping("google")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void logonGoogle(@RequestBody Usuario dados){
-        repository.save(dados);
+    @ApiOperation(value = "Pega o nome do usuário pelo id")
+    @GetMapping("{id}/nome")
+    @ResponseStatus(HttpStatus.OK)
+    public String getNomeById(@PathVariable Integer id){
+        Optional<Usuario> usuarioOp = repository.findById(id);
+        if (usuarioOp.isPresent())
+            return usuarioOp.get().getNome();
+        else
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "entity not found"
+            );
     }
+
+    @ApiOperation(value = "Inativa usuário pelo id")
+    @GetMapping("{id}/inativo")
+    @ResponseStatus(HttpStatus.OK)
+    public Boolean inativaById(@PathVariable Integer id){
+        Optional<Usuario> usuarioOp = repository.findById(id);
+        usuarioOp.ifPresent(u -> {
+            u.setAtivo(false);
+            repository.save(u);
+        });
+
+        if (! usuarioOp.isPresent())
+            throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "entity not found"
+            );
+
+        return usuarioOp.get().getAtivo();
+    }
+
 
 
 }
