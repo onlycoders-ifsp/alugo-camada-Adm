@@ -24,7 +24,6 @@ import java.util.Optional;
 @CrossOrigin("*")
 public class UsuarioController {
 
-
     private final UsuarioRepository repository;
 
     @ApiOperation(value = "Cria novo usuário")
@@ -43,18 +42,35 @@ public class UsuarioController {
 
     @ApiOperation(value = "Lista usuário")
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<Usuario> list(){
         return repository.findAll();
     }
 
-    @ApiOperation(value = "muda senha usuário")
+    @ApiOperation(value = "Muda senha usuário")
     @PatchMapping("{id}/muda-senha")
-    public void MudaSenha( @PathVariable Integer id, @RequestBody String nome){
+    @ResponseStatus(HttpStatus.OK)
+    public void mudaSenha( @PathVariable Integer id, @RequestBody String nome){
         Optional<Usuario> usuario = repository.findById(id);
         usuario.ifPresent( c -> {
             c.setNome(nome);
             repository.save(c);
         });
     }
+
+    @ApiOperation(value = "Muda dados usuário")
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    public void mudaDado(@RequestBody Usuario usuario) {
+        Optional<Usuario> usuarioBanco = repository.getByNomeAndEmail(usuario.getNome(), usuario.getEmail());
+    }
+
+    @ApiOperation(value = "Dados da api do google")
+    @PostMapping("google")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void logonGoogle(@RequestBody Usuario dados){
+        repository.save(dados);
+    }
+
 
 }
