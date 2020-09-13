@@ -9,7 +9,6 @@ package com.onlycoders.camadaadm.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -35,7 +34,7 @@ public class Usuario {
     private String login;
 
     @Column
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String senha;
 
     @Column
@@ -58,13 +57,22 @@ public class Usuario {
 
 
     @Column
-    private Date data_nascimento;
+    private Date dataNascimento;
 
     @Column
     private Boolean ativo;
 
     @Column
     private String codigo;
+
+    @Column
+    private String sexo;
+
+    @Column
+    private String telefone;
+
+    @Column
+    private String celular;
 
 
 }
