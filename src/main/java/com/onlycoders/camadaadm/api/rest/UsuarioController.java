@@ -16,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +29,14 @@ import java.util.Optional;
 public class UsuarioController {
 
     private final UsuarioRepository repository;
+
+    @ApiOperation(value = "Seleciona unico usuário")
+    @GetMapping("{codigo}")
+    @ResponseStatus(HttpStatus.OK)
+    public Usuario selecionaUm(@PathVariable String codigo){
+        return repository.getByCodigo(codigo);
+    }
+
 
     @ApiOperation(value = "Cria novo usuário")
     @PostMapping
