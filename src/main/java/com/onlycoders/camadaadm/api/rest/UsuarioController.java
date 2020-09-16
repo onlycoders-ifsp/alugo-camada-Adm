@@ -10,14 +10,12 @@ import com.onlycoders.camadaadm.model.entity.Usuario;
 import com.onlycoders.camadaadm.model.repository.UsuarioRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import javassist.NotFoundException;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,41 +28,41 @@ public class UsuarioController {
 
     private final UsuarioRepository repository;
 
-    @ApiOperation(value = "Seleciona unico usuário")
-    @GetMapping("{codigo}")
+    @ApiOperation(value = "Seleciona unico usuário pelo id")
+    @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Usuario selecionaUm(@PathVariable String codigo){
-        return repository.getByCodigo(codigo);
+    public Usuario selecionaUm(@PathVariable Integer id) {
+        return repository.getById(id);
     }
 
 
     @ApiOperation(value = "Cria novo usuário")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Usuario salvar(@RequestBody Usuario usuario){
+    public Usuario salvar(@RequestBody Usuario usuario) {
         return repository.save(usuario);
     }
 
     @ApiOperation(value = "Deleta usuário")
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletar(@PathVariable Integer id){
+    public void deletar(@PathVariable Integer id) {
         repository.deleteById(id);
     }
 
     @ApiOperation(value = "Lista usuário")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Usuario> list(){
+    public List<Usuario> list() {
         return repository.findAll();
     }
 
     @ApiOperation(value = "Muda senha usuário")
     @PatchMapping("{id}/muda-senha")
     @ResponseStatus(HttpStatus.OK)
-    public void mudaSenha( @PathVariable Integer id, @RequestBody String nome){
+    public void mudaSenha(@PathVariable Integer id, @RequestBody String nome) {
         Optional<Usuario> usuario = repository.findById(id);
-        usuario.ifPresent( c -> {
+        usuario.ifPresent(c -> {
             c.setNome(nome);
             repository.save(c);
         });
@@ -73,14 +71,14 @@ public class UsuarioController {
     @ApiOperation(value = "Muda dados usuário")
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public void mudaDado(@RequestBody Usuario usuario){
-        repository.save(usuario);
+    public Usuario mudaDado(@RequestBody Usuario usuario) {
+        return repository.save(usuario);
     }
 
     @ApiOperation(value = "Pega o nome do usuário pelo id")
     @GetMapping("{id}/nome")
     @ResponseStatus(HttpStatus.OK)
-    public String getNomeById(@PathVariable Integer id){
+    public String getNomeById(@PathVariable Integer id) {
         Optional<Usuario> usuarioOp = repository.findById(id);
         if (usuarioOp.isPresent())
             return usuarioOp.get().getNome();
@@ -93,21 +91,20 @@ public class UsuarioController {
     @ApiOperation(value = "Inativa usuário pelo id")
     @GetMapping("{id}/inativo")
     @ResponseStatus(HttpStatus.OK)
-    public Boolean inativaById(@PathVariable Integer id){
+    public Boolean inativaById(@PathVariable Integer id) {
         Optional<Usuario> usuarioOp = repository.findById(id);
         usuarioOp.ifPresent(u -> {
             u.setAtivo(false);
             repository.save(u);
         });
 
-        if (! usuarioOp.isPresent())
+        if (!usuarioOp.isPresent())
             throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND, "entity not found"
+                    HttpStatus.NOT_FOUND, "entity not found"
             );
 
         return usuarioOp.get().getAtivo();
     }
-
 
 
 }

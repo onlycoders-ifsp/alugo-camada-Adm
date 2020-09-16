@@ -17,7 +17,7 @@ import java.util.Optional;
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     @Query("select u from Usuario u where u.nome = ?1 and u.email = ?2")
     Optional<Usuario> getByNomeAndEmail(String nome, String email);
-
+    Usuario getById(Integer id);
     Usuario getByCodigo(String codigo);
 
     List<Usuario> getByNome(String nome);
