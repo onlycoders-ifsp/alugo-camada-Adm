@@ -55,24 +55,10 @@ public class Usuario {
     @Column
     private String email;
 
-
-    @Column
-    private Date dataNascimento;
-
     @Column
     private Boolean ativo;
 
     @Column
     private String codigo;
-
-    @Column
-    private String sexo;
-
-    @Column
-    private String telefone;
-
-    @Column
-    private String celular;
-
 
 }
